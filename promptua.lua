@@ -52,8 +52,8 @@ end
 function M.setup()
 	bait.catch('command.exit', function ()
 		local promptStr = ''
-		for _, module in pairs(M.prompt) do
-			local provider = module.provider
+		for _, segment in pairs(M.prompt) do
+			local provider = segment.provider
 			if type(provider) == 'function' then
 				promptStr = promptStr .. provider()
 			else
