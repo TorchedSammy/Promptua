@@ -12,7 +12,49 @@ git clone --depth 1 https://github.com/TorchedSammy/Promptua ~/.local/share/hilb
 ```
 
 # Usage
-Work in progress!
+To make a Promptua prompt, you have to make a proper theme.
+A theme is a table of [segments](#segments).
+
+## Example
+```lua
+local promptua = require 'promptua'
+
+local theme = {{
+	provider = 'dir.path'
+},
+{
+	provider = 'prompt.icon'
+}}
+
+promptua.setTheme(theme)
+promptua.init()
+```  
+
+## Segments
+A segment is a table which has at least a `provider` key, which shows the info in the segment.
+The `provider` can be a function or string. If it is a string, it will get a premade
+provider function which matches.
+
+### Premade Providers
+- `dir.path` - Path of current directory
+- `git.branch` - Git branch
+- `git.dirty` - Icon if local git has unpushed changes
+- `prompt.icon` - Main prompt icon
+
+## Config
+If needed, a theme can have configuration for it. This is in place for things
+like the `git.dirty` icon and prompt icon.
+
+Promptua has a default config which looks like:  
+```lua
+{
+	promptIcon = '%',
+	git = {
+		dirtyIcon = '*'
+	}	
+}
+```
 
 # License
 MIT
+
