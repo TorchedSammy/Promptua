@@ -80,7 +80,7 @@ function M.setTheme(theme)
 	loadTheme(theme)
 end
 
-function M.setup()
+function M.init()
 	bait.catch('command.exit', function ()
 		local promptStr = ''
 		for _, segment in pairs(M.prompt) do

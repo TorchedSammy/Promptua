@@ -17,5 +17,5 @@ local promptTheme = {
 }
 
 promptua.setTheme(promptTheme)
-promptua.setup()
+promptua.init()
 
