@@ -3,7 +3,7 @@ local promptua = require 'promptua'
 
 local promptTheme = {
 	{
-		provider = 'dir.name'
+		provider = 'dir.path'
 	},
 	{
 		provider = 'git.branch'

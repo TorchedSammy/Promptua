@@ -11,7 +11,7 @@ local M = {config = defaultConfig}
 local function initProviders()
 	local providerTbl = {
 		dir = {
-			name = function()
+			path = function()
 				return '%d'
 			end,
 		},
