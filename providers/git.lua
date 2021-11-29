@@ -9,4 +9,12 @@ function M.getBranch()
 	return gitbranch == '' and nil or gitbranch
 end
 
+function M.isDirty()
+	local res = io.popen 'git status --porcelain | wc -l'
+	local dirt = res:read():gsub('\n', '')
+	res:close()
+
+	return (dirt ~= '0')
+end
+
 return M

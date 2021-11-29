@@ -9,6 +9,9 @@ local promptTheme = {
 		provider = 'git.branch'
 	},
 	{
+		provider = 'git.dirty'
+	},
+	{
 		provider = 'prompt.icon'
 	}
 }

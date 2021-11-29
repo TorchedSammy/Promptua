@@ -29,6 +29,14 @@ local function initProviders()
 
 				return branch
 			end,
+			dirty = function ()
+				local isDirty = git.isDirty()
+				if not isDirty then
+					return ''
+				end
+
+				return M.config.git.dirtyIcon
+			end
 		}
 	}
 
