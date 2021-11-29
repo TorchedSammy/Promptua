@@ -1,5 +1,5 @@
 local M = {
-	git = require 'promptua.providers.git'
+	git = require 'git'
 }
 
 return M
