@@ -1,6 +1,12 @@
 local bait = require 'bait'
 local git = require 'providers.git'
-local M = {}
+local defaultConfig = {
+	promptIcon = '%',
+	git = {
+		dirtyIcon = '*'
+	}
+}
+local M = {config = defaultConfig}
 
 local function initProviders()
 	local providerTbl = {
@@ -11,7 +17,7 @@ local function initProviders()
 		},
 		prompt = {
 			icon = function ()
-				return '%'
+				return M.config.promptIcon
 			end,
 		},
 		git = {
@@ -41,6 +47,17 @@ end
 local function loadTheme(themeTbl)
 	-- take a table (thm) and set M.prompt
 	M.prompt = themeTbl
+end
+
+function M.setConfig(config)
+	-- Load config but add defaults
+	local mt = {
+		__index = function(_, k)
+			return defaultConfig[k]
+		end
+	}
+	setmetatable(config, mt)
+	M.config = config
 end
 
 -- Sets a Promptua theme.
