@@ -38,7 +38,7 @@ local function getProviderFunction(providerstr)
 	return M.providers[providerstr]
 end
 
-function M.loadTheme(themeTbl)
+local function loadTheme(themeTbl)
 	-- take a table (thm) and set M.prompt
 	M.prompt = themeTbl
 end
@@ -52,7 +52,7 @@ function M.setTheme(theme)
 		theme = dofile(themeFile)
 	end
 
-	M.loadTheme(theme)
+	loadTheme(theme)
 end
 
 function M.setup()
