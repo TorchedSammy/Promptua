@@ -1,4 +1,5 @@
 local bait = require 'bait'
+local git = require 'providers.git'
 local M = {}
 
 local function initProviders(provider)
@@ -15,7 +16,12 @@ local function initProviders(provider)
 		},
 		git = {
 			branch = function ()
-				-- todo
+				local branch = git.getBranch()
+				if not branch then
+					return ''
+				end
+
+				return branch
 			end,
 		}		
 	}
