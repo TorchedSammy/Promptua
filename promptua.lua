@@ -85,12 +85,17 @@ function M.init()
 		local promptStr = ''
 		for _, segment in pairs(M.prompt) do
 			local provider = segment.provider
+			local separator = segment.separator or ''
+			local info = ''
 			if type(provider) == 'function' then
-				promptStr = promptStr .. provider()
+				info = provider()
+			elseif type(provider) == 'string' then
+				info = getProviderFunction(provider)()
 			else
-				promptStr = promptStr .. getProviderFunction(provider)()
+				error('Invalid provider type: ' .. type(provider))
 			end
-			promptStr = promptStr .. ' '
+
+			promptStr = promptStr .. info .. separator
 		end
 		prompt(promptStr)
 	end)

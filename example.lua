@@ -3,13 +3,15 @@ local promptua = require 'promptua'
 
 local promptTheme = {
 	{
-		provider = 'dir.path'
+		provider = 'dir.path',
+		separator = ' '
 	},
 	{
-		provider = 'git.branch'
+		provider = 'git.branch',
 	},
 	{
-		provider = 'git.dirty'
+		provider = 'git.dirty',
+		separator = ' ',
 	},
 	{
 		provider = 'prompt.icon'
