@@ -2,7 +2,7 @@ local bait = require 'bait'
 local git = require 'providers.git'
 local M = {}
 
-local function initProviders(provider)
+local function initProviders()
 	local providerTbl = {
 		dir = {
 			name = function()
@@ -23,7 +23,7 @@ local function initProviders(provider)
 
 				return branch
 			end,
-		}		
+		}
 	}
 
 	M.providers = {}
