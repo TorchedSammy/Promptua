@@ -32,6 +32,13 @@ promptua.init()
 
 ## Segments
 A segment is a table which has at least a `provider` key, which shows the info in the segment.
+It can consist of the following keys:  
+```lua
+{
+	provider = '',
+	separator = ''
+}
+```  
 The `provider` can be a function or string. If it is a string, it will get a premade
 provider function which matches.
 
