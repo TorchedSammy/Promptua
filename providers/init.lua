@@ -1,5 +1,3 @@
-local M = {
+return {
 	git = require 'git'
 }
-
-return M
