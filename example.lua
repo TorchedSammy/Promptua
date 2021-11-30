@@ -14,7 +14,8 @@ local promptTheme = {
 		separator = ' ',
 	},
 	{
-		provider = 'prompt.icon'
+		provider = 'prompt.failSuccess',
+		separator = ' ',
 	}
 }
 

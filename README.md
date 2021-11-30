@@ -55,7 +55,15 @@ like the `git.dirty` icon and prompt icon.
 Promptua has a default config which looks like:  
 ```lua
 {
-	promptIcon = '%',
+	prompt = {
+		icon = '%',
+		success = {
+			icon = '%'
+		},
+		fail = {
+			icon = '%'
+		}
+	},
 	git = {
 		dirtyIcon = '*'
 	}	

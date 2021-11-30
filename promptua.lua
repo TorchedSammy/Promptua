@@ -1,12 +1,20 @@
 local bait = require 'bait'
 local git = require 'providers.git'
 local defaultConfig = {
-	promptIcon = '%',
+	prompt = {
+		icon = '%',
+		fail = '!'
+	},
 	git = {
 		dirtyIcon = '*'
 	}
 }
-local M = {config = defaultConfig}
+local M = {
+	config = defaultConfig,
+	promptInfo = {
+		exitCode = 0
+	}
+}
 
 local function initProviders()
 	local providerTbl = {
@@ -17,8 +25,20 @@ local function initProviders()
 		},
 		prompt = {
 			icon = function ()
-				return M.config.promptIcon
+				return M.config.prompt.icon
 			end,
+			failSuccess = function ()
+				local icon = ''
+				if M.promptInfo.exitCode == 0 then
+					local successPrompt =  M.config.prompt.success
+					icon = successPrompt and successPrompt or M.config.prompt.icon
+				else
+					local failPrompt = M.config.prompt.fail
+					icon = failPrompt and failPrompt or M.config.prompt.icon
+				end
+
+				return icon
+			end
 		},
 		git = {
 			branch = function ()
@@ -81,7 +101,8 @@ function M.setTheme(theme)
 end
 
 function M.init()
-	bait.catch('command.exit', function ()
+	bait.catch('command.exit', function (code)
+		M.promptInfo.exitCode = code
 		local promptStr = ''
 		for _, segment in pairs(M.prompt) do
 			local provider = segment.provider
