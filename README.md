@@ -57,12 +57,7 @@ Promptua has a default config which looks like:
 {
 	prompt = {
 		icon = '%',
-		success = {
-			icon = '%'
-		},
-		fail = {
-			icon = '%'
-		}
+		fail = '!'
 	},
 	git = {
 		dirtyIcon = '*'
