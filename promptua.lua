@@ -13,7 +13,8 @@ local M = {
 	config = defaultConfig,
 	promptInfo = {
 		exitCode = 0
-	}
+	},
+	version = '0.1.0'
 }
 
 local function initProviders()
