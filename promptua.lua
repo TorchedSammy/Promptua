@@ -121,7 +121,7 @@ function M.init()
 			elseif type(provider) == 'string' then
 				info = getProviderFunction(provider)()
 			else
-				error('Invalid provider type: ' .. type(provider))
+				error('promptua: invalid provider')
 			end
 
 			promptStr = promptStr .. info .. separator
