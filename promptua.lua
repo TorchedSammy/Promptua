@@ -73,9 +73,9 @@ local function getProviderFunction(providerstr)
 	return M.providers[providerstr]
 end
 
-local function loadTheme(themeTbl)
+local function loadTheme(thm)
 	-- take a table (thm) and set M.prompt
-	M.prompt = themeTbl
+	M.prompt = thm
 end
 
 function M.setConfig(config)
@@ -92,10 +92,15 @@ end
 -- Sets a Promptua theme.
 function M.setTheme(theme)
 	if type(theme) == 'string' then
-		theme = require(theme)
-		local themePath = 'themes/' .. theme .. '/'
+		local dataDir = hilbish.home .. '/.config/promptua/'
+		local themePath = dataDir .. 'themes/' .. theme .. '/'
 		local themeFile = themePath .. 'theme.lua'
-		theme = dofile(themeFile)
+		local ok = nil
+		ok, theme = pcall(dofile, themeFile)
+		if not ok then
+			print('Error loading theme: ' .. theme)
+			return
+		end
 	end
 
 	loadTheme(theme)
