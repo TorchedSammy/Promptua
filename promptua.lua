@@ -102,6 +102,7 @@ function M.setTheme(theme)
 end
 
 function M.init()
+	if not M.theme then error 'promptua: no theme set' end
 	bait.catch('command.exit', function (code)
 		M.promptInfo.exitCode = code
 		local promptStr = ''
