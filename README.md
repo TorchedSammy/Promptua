@@ -36,11 +36,14 @@ It can consist of the following keys:
 ```lua
 {
 	provider = '',
-	separator = ''
+	separator = '',
+	condition = function() end,
 }
 ```  
 The `provider` can be a function or string. If it is a string, it will get a premade
-provider function which matches.
+provider function which matches.  
+`condition` is a function which will determine whether to show the segment in the prompt.
+If it returns false, the provider will not be run and the segment will be skipped,
 
 ### Premade Providers
 - `dir.path` - Path of current directory

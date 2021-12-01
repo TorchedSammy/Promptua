@@ -69,8 +69,8 @@ local function initProviders()
 	end
 end
 
-local function getProviderFunction(providerstr)
-	return M.providers[providerstr]
+local function callDefaultProvider(providerstr)
+	return M.providers[providerstr]()
 end
 
 local function loadTheme(thm)
@@ -104,27 +104,41 @@ function M.setTheme(theme)
 		end
 	end
 
+	print('promptua: loading theme')
 	loadTheme(theme)
 end
 
 function M.init()
-	if not M.theme then error 'promptua: no theme set' end
+	if not M.prompt then error 'promptua: no theme set' end
 	bait.catch('command.exit', function (code)
 		M.promptInfo.exitCode = code
 		local promptStr = ''
 		for _, segment in pairs(M.prompt) do
-			local provider = segment.provider
-			local separator = segment.separator or ''
-			local info = ''
-			if type(provider) == 'function' then
-				info = provider()
-			elseif type(provider) == 'string' then
-				info = getProviderFunction(provider)()
-			else
-				error('promptua: invalid provider')
+			local cond = segment.condition
+			local function handleSegment()
+				local provider = segment.provider
+				local separator = segment.separator or ''
+				local info = ''
+				if type(provider) == 'function' then
+					info = provider()
+				elseif type(provider) == 'string' then
+					info = callDefaultProvider(provider)
+				else
+					error('promptua: invalid provider')
+				end
+
+				promptStr = promptStr .. info .. separator
 			end
 
-			promptStr = promptStr .. info .. separator
+			if type(cond) == 'function' then
+				if cond() then
+					handleSegment()
+				end
+			elseif type(cond) == 'nil' then
+				handleSegment()
+			else
+				error('promptua: invalid condition')
+			end
 		end
 		prompt(promptStr)
 	end)
