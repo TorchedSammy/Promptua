@@ -92,13 +92,14 @@ end
 -- Sets a Promptua theme.
 function M.setTheme(theme)
 	if type(theme) == 'string' then
+		local themeName = theme
 		local dataDir = hilbish.home .. '/.config/promptua/'
 		local themePath = dataDir .. 'themes/' .. theme .. '/'
 		local themeFile = themePath .. 'theme.lua'
 		local ok = nil
 		ok, theme = pcall(dofile, themeFile)
 		if not ok then
-			print('Error loading theme: ' .. theme)
+			error(string.format('promptua: error loading %s theme', themeName))
 			return
 		end
 	end
