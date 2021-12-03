@@ -22,10 +22,12 @@ A theme is a table of [segments](#segments).
 local promptua = require 'promptua'
 
 local theme = {{
-	provider = 'dir.path'
+	provider = 'dir.path',
+	style = 'blue',
 },
 {
-	provider = 'prompt.icon'
+	provider = 'prompt.icon',
+	style = 'green'
 }}
 
 promptua.setTheme(theme)
