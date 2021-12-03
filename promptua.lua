@@ -128,7 +128,7 @@ function M.init()
 			local cond = segment.condition
 			local function handleSegment()
 				local provider = segment.provider
-				local separator = segment.separator or ''
+				local separator = segment.separator or ' '
 				local style = segment.style
 				local format = segment.format or '@info'
 				local info = ''
