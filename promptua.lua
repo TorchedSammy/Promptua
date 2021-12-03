@@ -1,6 +1,6 @@
 local bait = require 'bait'
 local lunacolors = require 'lunacolors'
-local git = require 'providers.git'
+local _ = require 'provider' -- get Providers tables
 
 local defaultConfig = {
 	prompt = {
@@ -11,7 +11,7 @@ local defaultConfig = {
 		dirtyIcon = '*'
 	}
 }
-local M = {
+M = {
 	config = defaultConfig,
 	promptInfo = {
 		exitCode = 0
@@ -20,51 +20,8 @@ local M = {
 }
 
 local function initProviders()
-	local providerTbl = {
-		dir = {
-			path = function()
-				return '%d'
-			end,
-		},
-		prompt = {
-			icon = function ()
-				return M.config.prompt.icon
-			end,
-			failSuccess = function ()
-				local icon = ''
-				if M.promptInfo.exitCode == 0 then
-					local successPrompt =  M.config.prompt.success
-					icon = successPrompt and successPrompt or M.config.prompt.icon
-				else
-					local failPrompt = M.config.prompt.fail
-					icon = failPrompt and failPrompt or M.config.prompt.icon
-				end
-
-				return icon
-			end
-		},
-		git = {
-			branch = function ()
-				local branch = git.getBranch()
-				if not branch then
-					return ''
-				end
-
-				return branch
-			end,
-			dirty = function ()
-				local isDirty = git.isDirty()
-				if not isDirty then
-					return ''
-				end
-
-				return M.config.git.dirtyIcon
-			end
-		}
-	}
-
 	M.providers = {}
-	for k, v in pairs(providerTbl) do
+	for k, v in pairs(Providers) do
 		for kk, vv in pairs(v) do
 			M.providers[k .. '.' .. kk] = vv
 		end
