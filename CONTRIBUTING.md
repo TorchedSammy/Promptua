@@ -11,8 +11,8 @@ Promptua doesn't have that much providers, but you can change that. A good way t
 contribute is to add a provider function.
 
 To do so, edit the [provider source file](../provider.lua).  
-The `Providers` table there have all premade provider functions, and have
-nested tables of the functions. This is for better organization.  
+The `Providers` table there have all premade provider functions, which are in
+nested table. This is actually for better organization.  
 
 To add, for example, a `dir.basename` provider you would have a basename table in
 the dir table.  
