@@ -54,6 +54,10 @@ If it returns false, the provider will not be run and the segment will be skippe
 - `git.branch` - Git branch
 - `git.dirty` - Icon if local git has unpushed changes
 - `prompt.icon` - Main prompt icon
+- `prompt.failSuccess` - Prompt icon based on exit code of command
+- `command.execTime` - Time it took to run a command (hidden if 0s)
+- `user.name` - Username
+- `user.hostname` - Hostname of machine
 
 ## Config
 If needed, a theme can have configuration for it. This is in place for things
