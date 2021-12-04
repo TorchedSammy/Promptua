@@ -1,6 +1,7 @@
 local bait = require 'bait'
 local lunacolors = require 'lunacolors'
 local _ = require 'provider' -- get Providers tables
+local _ = require 'packagesearch'
 
 local defaultConfig = {
 	prompt = {
@@ -105,14 +106,17 @@ end
 function M.setTheme(theme)
 	if type(theme) == 'string' then
 		local themeName = theme
-		local dataDir = hilbish.home .. '/.config/promptua/'
-		local themePath = dataDir .. 'themes/' .. theme .. '/'
-		local themeFile = themePath .. 'theme.lua'
+		local dataDir = hilbish.home .. '/.config/promptua/themes/'
+		local themeFile = dataDir .. theme .. '/' .. 'theme.lua'
 		local ok = nil
 		ok, theme = pcall(dofile, themeFile)
 		if not ok then
-			error(string.format('promptua: error loading %s theme', themeName))
-			return
+			themeFile = package.searchpath('promptua.themes.' .. theme, package.path)
+			ok, theme = pcall(dofile, themeFile)
+			if not ok then
+				error(string.format('promptua: error loading %s theme', themeName))
+				return
+			end
 		end
 	end
 
