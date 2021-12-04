@@ -1,4 +1,6 @@
+local bait = require 'bait'
 local git = require 'providers.git'
+local _execTime = nil
 
 Providers = {
 	dir = {
@@ -47,6 +49,26 @@ Providers = {
 			end
 
 			return M.config.git.dirtyIcon
+		end
+	},
+	command = {
+		execTime = function()
+			if not _execTime then
+				_execTime = {}
+				bait.catch('command.preexec', function()
+					_execTime.stamp = os.time()
+				end)
+				return ''
+			end
+
+			local execTime = os.time() - _execTime.stamp
+			if execTime == 0 then return '' end
+			if execTime > 60 then
+				return string.format('%dm %ds', execTime / 60, execTime % 60)
+			else
+				return string.format('%ds', execTime)
+			end
+
 		end
 	}
 }
