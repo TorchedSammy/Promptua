@@ -6,6 +6,14 @@ Providers = {
 			return '%d'
 		end,
 	},
+	user = {
+		name = function()
+			return '%u'
+		end,
+		hostname = function()
+			return '%h'
+		end,
+	},
 	prompt = {
 		icon = function ()
 			return M.config.prompt.icon
