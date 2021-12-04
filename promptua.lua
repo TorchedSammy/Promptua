@@ -123,52 +123,56 @@ function M.setTheme(theme)
 	loadTheme(theme)
 end
 
+function M.handlePrompt(code)
+	if not code then code = 0 end
+	M.promptInfo.exitCode = code
+	local promptStr = ''
+	for _, segment in pairs(M.prompt) do
+		local cond = segment.condition
+		local function handleSegment()
+			local provider = segment.provider
+			local separator = segment.separator or ' '
+			local style = segment.style
+			local format = segment.format or '@info'
+			local info = ''
+
+			if type(provider) == 'function' then
+				info = provider()
+			elseif type(provider) == 'string' then
+				info = callDefaultProvider(provider)
+			else
+				error('promptua: invalid provider')
+			end
+
+			if style then
+				local fmtbl = {info = info}
+				if type(style) == 'string' then
+					info = fmt(format, style, fmtbl)
+				elseif type(style) == 'function' then
+					info = fmt(format, style(M.promptInfo), fmtbl)
+				end
+			end
+
+			promptStr = promptStr .. info .. separator
+		end
+
+		if type(cond) == 'function' then
+			if cond() then
+				handleSegment()
+			end
+		elseif type(cond) == 'nil' then
+			handleSegment()
+		else
+			error('promptua: invalid condition')
+		end
+	end
+	prompt(promptStr)
+end
+
 function M.init()
 	if not M.prompt then error 'promptua: no theme set' end
-	bait.catch('command.exit', function (code)
-		M.promptInfo.exitCode = code
-		local promptStr = ''
-		for _, segment in pairs(M.prompt) do
-			local cond = segment.condition
-			local function handleSegment()
-				local provider = segment.provider
-				local separator = segment.separator or ' '
-				local style = segment.style
-				local format = segment.format or '@info'
-				local info = ''
-
-				if type(provider) == 'function' then
-					info = provider()
-				elseif type(provider) == 'string' then
-					info = callDefaultProvider(provider)
-				else
-					error('promptua: invalid provider')
-				end
-
-				if style then
-					local fmtbl = {info = info}
-					if type(style) == 'string' then
-						info = fmt(format, style, fmtbl)
-					elseif type(style) == 'function' then
-						info = fmt(format, style(M.promptInfo), fmtbl)
-					end
-				end
-
-				promptStr = promptStr .. info .. separator
-			end
-
-			if type(cond) == 'function' then
-				if cond() then
-					handleSegment()
-				end
-			elseif type(cond) == 'nil' then
-				handleSegment()
-			else
-				error('promptua: invalid condition')
-			end
-		end
-		prompt(promptStr)
-	end)
+	M.handlePrompt()
+	bait.catch('command.exit', M.handlePrompt)
 end
 
 initProviders()
