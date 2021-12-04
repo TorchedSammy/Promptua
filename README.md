@@ -6,7 +6,7 @@ create good looking prompts with ease. For its use, it takes inspiration from
 [oh-my-posh](https://ohmyposh.dev/) and Galaxyline for Neovim.
 
 # Install
-> Promptua requires Hilbish v0.5+
+> Promptua requires Hilbish v0.6+
 
 Clone to a Hilbish library directory:  
 ```
