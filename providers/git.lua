@@ -6,12 +6,27 @@ function M.isRepo()
 end
 
 function M.getBranch()
-	local res = io.popen 'git rev-parse --abbrev-ref HEAD 2> /dev/null'
-	local gitbranch = res:read()
-	res:close()
+	if not M.isRepo() then
+		return nil
+	end
 
-	-- return nil if no git branch
-	return gitbranch == '' and nil or gitbranch
+	local headfile = io.open '.git/HEAD'
+	if not headfile then
+		return nil
+	end
+
+	local inf = headfile:read '*a'
+	headfile:close()
+	-- there is a format like 'ref: refs/heads/master'
+	-- so get just the branch name
+	-- and handle detached head case
+	local branch = inf:match 'ref: refs/heads/(.+)' or inf:match 'ref: (.+)'
+
+	-- remove newline
+	if branch then branch = branch:gsub('\n', '') end
+
+	-- return nil if no branch found
+	return branch or nil
 end
 
 function M.isDirty()
