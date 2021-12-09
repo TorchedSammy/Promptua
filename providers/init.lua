@@ -1,3 +1,0 @@
-return {
-	git = require 'git'
-}
