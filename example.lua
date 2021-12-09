@@ -1,20 +1,22 @@
 package.loaded['promptua'] = nil
 local promptua = require 'promptua'
+local git = require 'providers.git'
 
 local promptTheme = {
 	{
 		provider = 'dir.path',
-		separator = ' ',
 		style = 'blue',
 	},
 	{
 		provider = 'git.branch',
-		style = 'gray'
+		style = 'gray',
+		separator = '',
+		condition = git.isRepo
 	},
 	{
 		provider = 'git.dirty',
-		separator = ' ',
-		style = 'yellow'
+		style = 'yellow',
+		condition = git.isRepo
 	},
 	{
 		provider = 'prompt.failSuccess',
