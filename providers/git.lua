@@ -38,4 +38,32 @@ function M.isDirty()
 	return (dirt ~= '0')
 end
 
+-- check if local is ahead of remote
+-- will return nil if not a repo
+function M.aheadRemote()
+	if not M.isRepo() then
+		return nil
+	end
+
+	local res = io.popen 'git rev-list @..@{u}'
+	local ahead = res:read():gsub('\n', '')
+	res:close()
+
+	return (ahead ~= '0')
+end
+
+-- check if local is behind remote
+-- will return nil if not a repo
+function M.behindRemote()
+	if not M.isRepo() then
+		return nil
+	end
+
+	local res = io.popen 'git rev-list @{u}..@'
+	local behind = res:read():gsub('\n', '')
+	res:close()
+
+	return (behind ~= '0')
+end
+
 return M
