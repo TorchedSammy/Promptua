@@ -1,5 +1,10 @@
 local M = {}
 
+function M.isRepo()
+	-- just run rev-parse to see if it's a git repo
+	return os.execute("git rev-parse --git-dir > /dev/null 2>&1") == 0
+end
+
 function M.getBranch()
 	local res = io.popen 'git rev-parse --abbrev-ref HEAD 2> /dev/null'
 	local gitbranch = res:read()
