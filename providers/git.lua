@@ -26,6 +26,7 @@ function M.getBranch()
 	if branch then branch = branch:gsub('\n', '') end
 
 	-- return nil if no branch found
+	-- its falsy if branch is empty string which is why the or works
 	return branch or nil
 end
 
