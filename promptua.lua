@@ -135,6 +135,7 @@ function M.handlePrompt(code)
 				format = segment.format,
 				separator = segment.separator,
 			}
+			segment.info = {exitCode = M.promptInfo.exitCode}
 			local info = ''
 
 			if type(provider) == 'function' then

@@ -26,7 +26,7 @@ Providers = {
 			return M.config.prompt.icon
 		end,
 		failSuccess = function(segment)
-			if M.promptInfo.exitCode == 0 then
+			if segment.info.exitCode == 0 then
 				-- defaults for success prompt
 				segment.set {
 					style = 'green',
