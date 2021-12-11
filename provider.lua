@@ -15,6 +15,11 @@ Providers = {
 		hostname = function()
 			return '%h'
 		end,
+		time = function()
+			-- get the time with lua's os.time()
+			-- and convert it to a string
+			return os.date('🕙 %I:%M:%S %P', os.time())
+		end,
 	},
 	prompt = {
 		icon = function ()
