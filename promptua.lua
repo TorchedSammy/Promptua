@@ -83,8 +83,18 @@ local function fmt(formatstr, style, verbs)
 		end
 		return '{' .. v .. '}'
 	end)
-	formatstr = lunacolors.format(stylesformatted:gsub('%s', '') .. formatstr)
+	-- replace {style} with the ansi code, gsub removes spaces between style
+	-- only apply style where `@style` is present
 	local formatted = formatstr:gsub('@%a+', function(v)
+		-- if its @style use our style
+		if v:sub(2) == 'style' then
+			return stylesformatted:gsub('%s', ''):gsub('{%a+}', function(key)
+				if not styles[key:sub(2, -2)] then
+					return ''
+				end
+				return styles[key:sub(2, -2)][2]
+			end)
+		end
 		return verbs[v:sub(2)] or v
 	end)
 
@@ -133,7 +143,7 @@ function M.handlePrompt(code)
 			local provider = segment.provider
 			local separator = segment.separator or ' '
 			local style = segment.style
-			local format = segment.format or '@info'
+			local format = segment.format or '@style@icon@info'
 			local info = ''
 
 			if type(provider) == 'function' then
@@ -145,7 +155,7 @@ function M.handlePrompt(code)
 			end
 
 			if style then
-				local fmtbl = {info = info}
+				local fmtbl = {info = info, icon = segment.icon or ''}
 				if type(style) == 'string' then
 					info = fmt(format, style, fmtbl)
 				elseif type(style) == 'function' then
