@@ -1,5 +1,4 @@
 local bait = require 'bait'
-local lunacolors = require 'lunacolors'
 local _ = require 'provider' -- get Providers tables
 local _ = require 'packagesearch'
 
@@ -43,58 +42,50 @@ local function ansi(open, close, text)
 	return '\27[' .. open .. 'm' .. text .. '\27[' .. close .. 'm'
 end
 local styles = {
-	reset = {'{reset}', ansi(0)},
-	bold = {'{bold}', ansi(1)},
-	dim = {'{dim}', ansi(2)},
-	italic = {'{italic}', ansi(3)},
-	underline = {'{underline}', ansi(4)},
-	invert = {'{invert}', ansi(7)},
-	bold_off = {'{bold-off}', ansi(22)},
-	underline_off = {'{underline-off}', ansi(24)},
-	black = {'{black}', ansi(30)},
-	red = {'{red}', ansi(31)},
-	green = {'{green}', ansi(32)},
-	yellow = {'{yellow}', ansi(33)},
-	blue = {'{blue}', ansi(34)},
-	magenta = {'{magenta}', ansi(35)},
-	cyan = {'{cyan}', ansi(36)},
-	white = {'{white}', ansi(37)},
-	red_bg = {'{red-bg}', ansi(41)},
-	green_bg = {'{green-bg}', ansi(42)},
-	yellow_bg = {'{green-bg}', ansi(43)},
-	blue_bg = {'{blue-bg}', ansi(44)},
-	magenta_bg = {'{magenta-bg}', ansi(45)},
-	cyan_bg = {'{cyan-bg}', ansi(46)},
-	white_bg = {'{white-bg}', ansi(47)},
-	gray = {'{gray}', ansi(90)},
-	bright_red = {'{bright-red}', ansi(91)},
-	bright_green = {'{bright-green}', ansi(92)},
-	bright_yellow = {'{bright-yellow}', ansi(93)},
-	bright_blue = {'{bright-blue}', ansi(94)},
-	bright_magenta = {'{bright-magenta}', ansi(95)},
-	bright_cyan = {'{bright-cyan}', ansi(96)}
+	reset = ansi(0),
+	bold = ansi(1),
+	dim = ansi(2),
+	italic = ansi(3),
+	underline = ansi(4),
+	invert = ansi(7),
+	bold_off = ansi(22),
+	underline_off = ansi(24),
+	black = ansi(30),
+	red = ansi(31),
+	green = ansi(32),
+	yellow = ansi(33),
+	blue = ansi(34),
+	magenta = ansi(35),
+	cyan = ansi(36),
+	white = ansi(37),
+	red_bg = ansi(41),
+	green_bg = ansi(42),
+	yellow_bg = ansi(43),
+	blue_bg = ansi(44),
+	magenta_bg = ansi(45),
+	cyan_bg = ansi(46),
+	white_bg = ansi(47),
+	gray = ansi(90),
+	bright_red = ansi(91),
+	bright_green = ansi(92),
+	bright_yellow = ansi(93),
+	bright_blue = ansi(94),
+	bright_magenta = ansi(95),
+	bright_cyan = ansi(96)
 }
 
--- fmt takes a string with format verbs and a style
+-- fmt takes a string with format verbs and a style and returns a formatted string,
+-- with style applied
 local function fmt(formatstr, style, verbs)
-	-- turn space separated format verbs into a string like '{bold}{red}'
-	local stylesformatted = style:gsub('%a+', function(v)
-		if not styles[v] then
-			return ''
-		end
-		return '{' .. v .. '}'
-	end)
-	-- only apply style where `@style` is present
 	local formatted = formatstr:gsub('@%a+', function(v)
 		-- if its @style use our style
 		if v:sub(2) == 'style' then
-			return stylesformatted:gsub('%s', ''):gsub('{%a+}', function(key)
-				-- replace {style} with the ansi code, gsub removes spaces between style
-				if not styles[key:sub(2, -2)] then
+			return style:gsub('%a+', function(key)
+				if not styles[key] then
 					return ''
 				end
-				return styles[key:sub(2, -2)][2]
-			end)
+				return styles[key]
+			end):gsub('%s+', '')
 		end
 		return verbs[v:sub(2)] or v
 	end)
@@ -164,7 +155,7 @@ function M.handlePrompt(code)
 				end
 			end
 
-			promptStr = promptStr .. info .. separator
+			promptStr = promptStr .. info .. separator .. styles.reset
 		end
 
 		if type(cond) == 'function' then
