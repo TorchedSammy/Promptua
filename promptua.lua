@@ -190,7 +190,7 @@ function M.init()
 
 		function segment.set(opts)
 			for k, v in pairs(opts) do
-				if segment[k] then segment[k] = v end
+				segment[k] = v
 			end
 		end
 	end
