@@ -1,6 +1,6 @@
 local bait = require 'bait'
 local _ = require 'provider' -- get Providers tables
-local _ = require 'packagesearch'
+local searchpath = require 'searchpath'
 
 local defaultConfig = {
 	prompt = {
@@ -113,7 +113,7 @@ function M.setTheme(theme)
 		local ok = nil
 		ok, theme = pcall(dofile, themeFile)
 		if not ok then
-			themeFile = package.searchpath('promptua.themes.' .. theme, package.path)
+			themeFile = searchpath('promptua.themes.' .. theme, package.path)
 			ok, theme = pcall(dofile, themeFile)
 			if not ok then
 				error(string.format('promptua: error loading %s theme', themeName))

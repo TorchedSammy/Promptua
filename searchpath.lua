@@ -1,7 +1,7 @@
 local fs = require 'fs'
 
--- polyfill a packagesearch function (hilbish is 5.1 so we don't have it)
-function package.searchpath (name, path, sep, rep)
+-- package.searchpath function (hilbish is 5.1 so we don't have it)
+return function(name, path, sep, rep)
 	if type(name) ~= 'string' then
 		error(('bad argument #1 to \'searchpath\' (string expected, got %s)'):format(type(path)), 2)
 	end
