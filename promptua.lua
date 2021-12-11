@@ -175,8 +175,8 @@ function M.init()
 	if not M.prompt then error 'promptua: no theme set' end
 	-- add functions to segments in M.prompt
 	for _, segment in pairs(M.prompt) do
-		function defineSetFunctions(funcs)
-			for _, v in pairs(funcs) do
+		function defineSetFunctions(...)
+			for _, v in pairs({...}) do
 				-- titlecase the function name
 				local funcName = v:sub(1, 1):upper() .. v:sub(2)
 				segment['set' .. funcName] = function(val)
@@ -186,7 +186,7 @@ function M.init()
 			end
 		end
 
-		defineSetFunctions({'condition', 'separator', 'style', 'format', 'icon'})
+		defineSetFunctions('condition', 'separator', 'style', 'format', 'icon')
 
 		function segment.set(opts)
 			for k, v in pairs(opts) do
