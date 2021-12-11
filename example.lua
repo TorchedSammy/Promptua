@@ -10,24 +10,19 @@ local promptTheme = {
 	{
 		provider = 'git.branch',
 		style = 'gray',
-		separator = '',
-		condition = git.isRepo
+		separator = ''
 	},
 	{
 		provider = 'git.dirty',
-		style = 'yellow',
-		condition = git.isRepo
+		style = 'yellow'
+	},
+	{
+		provider = 'user.time',
+		style = 'gray'
 	},
 	{
 		provider = 'prompt.failSuccess',
-		separator = ' ',
-		style = function (info)
-			if info.exitCode ~= 0 then
-				return 'bold red'
-			else
-				return 'green'
-			end
-		end
+		separator = ' '
 	}
 }
 

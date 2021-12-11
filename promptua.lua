@@ -16,7 +16,7 @@ M = {
 	promptInfo = {
 		exitCode = 0
 	},
-	version = '0.2.0'
+	version = '0.3.0'
 }
 
 local function initProviders()
@@ -28,8 +28,8 @@ local function initProviders()
 	end
 end
 
-local function callDefaultProvider(providerstr)
-	return M.providers[providerstr]()
+local function callDefaultProvider(providerstr, segment)
+	return M.providers[providerstr](segment)
 end
 
 local function loadTheme(thm)
@@ -133,18 +133,18 @@ function M.handlePrompt(code)
 		local cond = segment.condition
 		local function handleSegment()
 			local provider = segment.provider
-			local separator = segment.separator or ' '
-			local style = segment.style
-			local format = segment.format or '@style@icon@info'
 			local info = ''
 
 			if type(provider) == 'function' then
 				info = provider()
 			elseif type(provider) == 'string' then
-				info = callDefaultProvider(provider)
+				info = callDefaultProvider(provider, segment)
 			else
 				error('promptua: invalid provider')
 			end
+			local format = segment.format or '@style@icon@info'
+			local style = segment.style
+			local separator = segment.separator or ' '
 
 			if style then
 				local fmtbl = {info = info, icon = segment.icon or ''}
@@ -173,6 +173,28 @@ end
 
 function M.init()
 	if not M.prompt then error 'promptua: no theme set' end
+	-- add functions to segments in M.prompt
+	for _, segment in pairs(M.prompt) do
+		function defineSetFunctions(funcs)
+			for _, v in pairs(funcs) do
+				-- titlecase the function name
+				local funcName = v:sub(1, 1):upper() .. v:sub(2)
+				segment['set' .. funcName] = function(val)
+					segment[v] = val
+					return segment
+				end
+			end
+		end
+
+		defineSetFunctions({'condition', 'separator', 'style', 'format', 'icon'})
+
+		function segment.set(opts)
+			for k, v in pairs(opts) do
+				if segment[k] then segment[k] = v end
+			end
+		end
+	end
+
 	M.handlePrompt()
 	bait.catch('command.exit', M.handlePrompt)
 end

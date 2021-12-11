@@ -25,21 +25,24 @@ Providers = {
 		icon = function ()
 			return M.config.prompt.icon
 		end,
-		failSuccess = function ()
+		failSuccess = function(segment)
 			local icon = ''
 			if M.promptInfo.exitCode == 0 then
 				local successPrompt =  M.config.prompt.success
 				icon = successPrompt and successPrompt or M.config.prompt.icon
+				segment.setStyle 'green'
 			else
 				local failPrompt = M.config.prompt.fail
 				icon = failPrompt and failPrompt or M.config.prompt.icon
+				segment.setStyle 'bold red'
 			end
 
 			return icon
 		end
 	},
 	git = {
-		branch = function ()
+		branch = function(segment)
+			segment.setCondition(git.isRepo)
 			local branch = git.getBranch()
 			if not branch then
 				return ''
@@ -47,7 +50,8 @@ Providers = {
 
 			return branch
 		end,
-		dirty = function ()
+		dirty = function(segment)
+			segment.setCondition(git.isRepo)
 			local isDirty = git.isDirty()
 			if not isDirty then
 				return ''
