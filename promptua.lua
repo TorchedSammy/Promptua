@@ -129,12 +129,6 @@ function M.handlePrompt(code)
 		local cond = segment.condition
 		local function handleSegment()
 			local provider = segment.provider
-			local useropts = {
-				icon = segment.icon,
-				style = segment.style,
-				format = segment.format,
-				separator = segment.separator,
-			}
 			segment.info = {exitCode = M.promptInfo.exitCode}
 			local info = ''
 
@@ -145,10 +139,10 @@ function M.handlePrompt(code)
 			else
 				error('promptua: invalid provider')
 			end
-			local style = useropts.style or segment.style
-			local icon = useropts.icon or segment.icon or ''
-			local format = useropts.format or segment.format or M.config.format
-			local separator = useropts.separator or segment.separator or M.config.separator
+			local style = segment.style or segment.defaults.style
+			local icon = segment.icon or segment.defaults.icon or ''
+			local format = segment.format or segment.defaults.format or M.config.format
+			local separator = segment.separator or segment.defaults.separator or M.config.separator
 
 			if style then
 				-- reason for info or is because some segments only set icon and no info
@@ -180,12 +174,13 @@ function M.init()
 	if not M.prompt then error 'promptua: no theme set' end
 	-- add functions to segments in M.prompt
 	for _, segment in pairs(M.prompt) do
+		segment.defaults = {}
 		function defineSetFunctions(...)
 			for _, v in pairs({...}) do
 				-- titlecase the function name
 				local funcName = v:sub(1, 1):upper() .. v:sub(2)
 				segment['set' .. funcName] = function(val)
-					segment[v] = val
+					segment.defaults[v] = val
 					return segment
 				end
 			end
@@ -195,7 +190,7 @@ function M.init()
 
 		function segment.set(opts)
 			for k, v in pairs(opts) do
-				segment[k] = v
+				segment.defaults[k] = v
 			end
 		end
 	end
