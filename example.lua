@@ -1,6 +1,4 @@
-package.loaded['promptua'] = nil
 local promptua = require 'promptua'
-local git = require 'providers.git'
 
 local promptTheme = {
 	{

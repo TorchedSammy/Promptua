@@ -129,6 +129,12 @@ function M.handlePrompt(code)
 		local cond = segment.condition
 		local function handleSegment()
 			local provider = segment.provider
+			local useropts = {
+				icon = segment.icon,
+				style = segment.style,
+				format = segment.format,
+				separator = segment.separator,
+			}
 			local info = ''
 
 			if type(provider) == 'function' then
@@ -138,16 +144,18 @@ function M.handlePrompt(code)
 			else
 				error('promptua: invalid provider')
 			end
-			local format = segment.format or '@style@icon@info'
-			local style = segment.style
-			local separator = segment.separator or ' '
+			local style = useropts.style or segment.style
+			local icon = useropts.icon or segment.icon or ''
+			local format = useropts.format or segment.format or M.config.format
+			local separator = useropts.separator or segment.separator or M.config.separator
 
 			if style then
-				local fmtbl = {info = info, icon = segment.icon or ''}
+				-- reason for info or is because some segments only set icon and no info
+				local fmtbl = {info = info or '', icon = icon}
 				if type(style) == 'string' then
 					info = fmt(format, style, fmtbl)
 				elseif type(style) == 'function' then
-					info = fmt(format, style(M.promptInfo), fmtbl)
+					info = fmt(format, style(segment), fmtbl)
 				end
 			end
 

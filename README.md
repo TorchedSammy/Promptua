@@ -60,19 +60,14 @@ If it returns false, the provider will not be run and the segment will be skippe
 - `user.hostname` - Hostname of machine
 
 ## Config
-If needed, a theme can have configuration for it. This is in place for things
-like the `git.dirty` icon and prompt icon.
+If needed, you can change the default separator or format for segments,
+or have configuration for certain providers via the config.
 
-Promptua has a default config which looks like:  
+Promptua has a default which looks like:  
 ```lua
 {
-	prompt = {
-		icon = '%',
-		fail = '!'
-	},
-	git = {
-		dirtyIcon = '*'
-	}	
+	format = '@style@icon@text',
+	separator = ' '
 }
 ```
 
