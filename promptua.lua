@@ -77,18 +77,19 @@ local styles = {
 
 -- fmt takes a string with format verbs and a style
 local function fmt(formatstr, style, verbs)
+	-- turn space separated format verbs into a string like '{bold}{red}'
 	local stylesformatted = style:gsub('%a+', function(v)
 		if not styles[v] then
 			return ''
 		end
 		return '{' .. v .. '}'
 	end)
-	-- replace {style} with the ansi code, gsub removes spaces between style
 	-- only apply style where `@style` is present
 	local formatted = formatstr:gsub('@%a+', function(v)
 		-- if its @style use our style
 		if v:sub(2) == 'style' then
 			return stylesformatted:gsub('%s', ''):gsub('{%a+}', function(key)
+				-- replace {style} with the ansi code, gsub removes spaces between style
 				if not styles[key:sub(2, -2)] then
 					return ''
 				end
