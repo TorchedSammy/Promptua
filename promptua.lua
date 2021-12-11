@@ -3,14 +3,10 @@ local _ = require 'provider' -- get Providers tables
 local searchpath = require 'searchpath'
 
 local defaultConfig = {
-	prompt = {
-		icon = '%',
-		fail = '!'
-	},
-	git = {
-		dirtyIcon = '*'
-	}
+	format = '@style@icon@info',
+	separator = ' ',
 }
+
 M = {
 	config = defaultConfig,
 	promptInfo = {
