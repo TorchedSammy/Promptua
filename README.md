@@ -40,14 +40,25 @@ It can consist of the following keys:
 ```lua
 {
 	provider = '',
-	separator = '',
+	separator = ' ',
 	condition = function() end,
+	icon = '',
+	style = '',
+	format = '@style@icon@info'
 }
 ```  
 The `provider` can be a function or string. If it is a string, it will get a premade
 provider function which matches.  
 `condition` is a function which will determine whether to show the segment in the prompt.
 If it returns false, the provider will not be run and the segment will be skipped,
+
+`style` is the color or general style of the info in the segment.  
+It is space separated. The following styles are available:  
+- Colors: black, red, green, blue, yellow, magenta, cyan, white.
+There are bright variants, which are prefixed with `bright-`, like `bright-red`.
+For background colors, there is a suffix of `-bg`, like `green-bg`.
+These can be combined, for example with `bright-blue-bg`.
+- Modifiers: dim, italic, underline, invert.
 
 ### Premade Providers
 - `dir.path` - Path of current directory
