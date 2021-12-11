@@ -15,10 +15,11 @@ Providers = {
 		hostname = function()
 			return '%h'
 		end,
-		time = function()
+		time = function(segment)
+			segment.setIcon '🕙 '
 			-- get the time with lua's os.time()
 			-- and convert it to a string
-			return os.date('🕙 %I:%M:%S %P', os.time())
+			return os.date('%I:%M:%S %P', os.time())
 		end,
 	},
 	prompt = {
@@ -63,23 +64,24 @@ Providers = {
 		end
 	},
 	command = {
-		execTime = function()
+		execTime = function(segment)
 			if not _execTime then
-				_execTime = {}
+				_execTime = {stamp = os.time()}
 				bait.catch('command.preexec', function()
 					_execTime.stamp = os.time()
 				end)
-				return ''
 			end
 
 			local execTime = os.time() - _execTime.stamp
-			if execTime == 0 then return '' end
+			segment.setCondition(function()
+				return execTime > 0
+			end)
+
 			if execTime > 60 then
 				return string.format('%dm %ds', execTime / 60, execTime % 60)
 			else
 				return string.format('%ds', execTime)
 			end
-
 		end
 	}
 }

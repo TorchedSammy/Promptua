@@ -130,6 +130,18 @@ function M.setTheme(theme)
 	loadTheme(theme)
 end
 
+local function handleCond(cond)
+	if type(cond) == 'function' then
+		if cond() then
+			return true
+		end
+	elseif type(cond) == 'nil' then
+		return true
+	else
+		error('promptua: invalid condition')
+	end
+end
+
 function M.handlePrompt(code)
 	if not code then code = 0 end
 	M.promptInfo.exitCode = code
@@ -152,6 +164,8 @@ function M.handlePrompt(code)
 			local icon = segment.icon or segment.defaults.icon or ''
 			local format = segment.format or segment.defaults.format or M.config.format
 			local separator = segment.separator or segment.defaults.separator or M.config.separator
+			local condition = segment.condition or segment.defaults.condition
+			if not handleCond(condition) then return end
 
 			if style then
 				-- reason for info or is because some segments only set icon and no info
@@ -166,15 +180,7 @@ function M.handlePrompt(code)
 			promptStr = promptStr .. info .. separator .. styles.reset
 		end
 
-		if type(cond) == 'function' then
-			if cond() then
-				handleSegment()
-			end
-		elseif type(cond) == 'nil' then
-			handleSegment()
-		else
-			error('promptua: invalid condition')
-		end
+		if handleCond(cond) then handleSegment() end
 	end
 	prompt(promptStr)
 end

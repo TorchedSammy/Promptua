@@ -19,9 +19,12 @@ local promptTheme = {
 		style = 'gray'
 	},
 	{
+		provider = 'command.execTime'
+	},
+	{
 		provider = 'prompt.failSuccess',
 		separator = ' '
-	}
+	},
 }
 
 promptua.setTheme(promptTheme)
