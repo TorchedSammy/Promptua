@@ -6,9 +6,10 @@ create good looking prompts with ease. For its use, it takes inspiration from
 [oh-my-posh](https://ohmyposh.dev/) and Galaxyline for Neovim.
 
 # Install
-> Promptua requires Hilbish v0.6+
+> Promptua requires Hilbish v1.0+
 
-Clone to a Hilbish library directory:  
+Clone to a Hilbish library directory:
+
 ```
 git clone --depth 1 https://github.com/TorchedSammy/Promptua ~/.local/share/hilbish/libs/promptua
 ```
@@ -32,11 +33,12 @@ local theme = {{
 
 promptua.setTheme(theme)
 promptua.init()
-```  
+```
 
 ## Segments
 A segment is a table which has at least a `provider` key, which shows the info in the segment.
-It can consist of the following keys:  
+It can consist of the following keys:
+
 ```lua
 {
 	provider = '',
@@ -46,14 +48,17 @@ It can consist of the following keys:
 	style = '',
 	format = '@style@icon@info'
 }
-```  
+```
+
 The `provider` can be a function or string. If it is a string, it will get a premade
-provider function which matches.  
+provider function which matches.
+
 `condition` is a function which will determine whether to show the segment in the prompt.
 If it returns false, the provider will not be run and the segment will be skipped,
 
-`style` is the color or general style of the info in the segment.  
-It is space separated. The following styles are available:  
+`style` is the color or general style of the info in the segment.
+It is space separated. The following styles are available:
+
 - Colors: black, red, green, blue, yellow, magenta, cyan, white.
 There are bright variants, which are prefixed with `bright-`, like `bright-red`.
 For background colors, there is a suffix of `-bg`, like `green-bg`.
@@ -74,7 +79,8 @@ These can be combined, for example with `bright-blue-bg`.
 If needed, you can change the default separator or format for segments,
 or have configuration for certain providers via the config.
 
-Promptua has a default which looks like:  
+Promptua has a default which looks like:
+	
 ```lua
 {
 	format = '@style@icon@text',
