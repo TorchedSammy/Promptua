@@ -177,7 +177,7 @@ function M.handlePrompt(code)
 
 		if handleCond(cond) then handleSegment() end
 	end
-	prompt(promptStr)
+	hilbish.prompt(promptStr)
 end
 
 function M.init()
