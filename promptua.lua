@@ -9,10 +9,7 @@ local defaultConfig = {
 
 M = {
 	config = defaultConfig,
-	promptInfo = {
-		exitCode = 0
-	},
-	version = '0.3.0'
+	version = '0.4.0'
 }
 
 local function initProviders()
@@ -144,13 +141,11 @@ end
 
 function M.handlePrompt(code)
 	if not code then code = 0 end
-	M.promptInfo.exitCode = code
 	local promptStr = ''
 	for _, segment in pairs(M.prompt) do
 		local cond = segment.condition
 		local function handleSegment()
 			local provider = segment.provider
-			segment.info = {exitCode = M.promptInfo.exitCode}
 			local info = ''
 
 			if type(provider) == 'function' then
