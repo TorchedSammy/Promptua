@@ -1,6 +1,6 @@
 local bait = require 'bait'
 local git = require 'providers.git'
-local _execTime = nil
+local execTime = nil
 
 Providers = {
 	dir = {
@@ -16,10 +16,10 @@ Providers = {
 			return '%h'
 		end,
 		time = function(segment)
-			segment.setIcon '🕙 '
+			segment.defaults.icon = '🕙 '
 			-- get the time with lua's os.time()
 			-- and convert it to a string
-			return os.date('%I:%M:%S %P', os.time())
+			return os.date('%I:%M:%S %p', os.time())
 		end,
 	},
 	prompt = {
@@ -29,12 +29,12 @@ Providers = {
 		failSuccess = function(segment)
 			if hilbish.exitCode == 0 then
 				-- defaults for success prompt
-				segment.set {
+				segment.defaults = {
 					style = 'green',
 					icon = '%'
 				}
 			else
-				segment.set {
+				segment.defaults = {
 					style = 'bold red',
 					icon = '!'
 				}
@@ -43,9 +43,7 @@ Providers = {
 	},
 	git = {
 		branch = function(segment)
-			segment.set {
-				condition = git.isRepo
-			}
+			segment.defaults.condition = git.isRepo
 			local branch = git.getBranch()
 			if not branch then
 				return ''
@@ -54,7 +52,7 @@ Providers = {
 			return branch
 		end,
 		dirty = function(segment)
-			segment.set {
+			segment.defaults = {
 				condition = function()
 					return git.isRepo() and git.isDirty()
 				end,
@@ -65,17 +63,17 @@ Providers = {
 	},
 	command = {
 		execTime = function(segment)
-			if not _execTime then
-				_execTime = {stamp = os.time()}
+			if not execTime then
+				execTime = {stamp = os.time()}
 				bait.catch('command.preexec', function()
-					_execTime.stamp = os.time()
+					execTime.stamp = os.time()
 				end)
 			end
 
-			local execTime = os.time() - _execTime.stamp
-			segment.setCondition(function()
-				return execTime > 0
-			end)
+			local execTime = os.time() - execTime.stamp
+			segment.defaults.condition = function()
+				return execTime > 1
+			end
 
 			if execTime > 60 then
 				return string.format('%dm %ds', execTime / 60, execTime % 60)

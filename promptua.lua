@@ -185,24 +185,6 @@ function M.init()
 	-- add functions to segments in M.prompt
 	for _, segment in pairs(M.prompt) do
 		segment.defaults = {}
-		function defineSetFunctions(...)
-			for _, v in pairs({...}) do
-				-- titlecase the function name
-				local funcName = v:sub(1, 1):upper() .. v:sub(2)
-				segment['set' .. funcName] = function(val)
-					segment.defaults[v] = val
-					return segment
-				end
-			end
-		end
-
-		defineSetFunctions('condition', 'separator', 'style', 'format', 'icon')
-
-		function segment.set(opts)
-			for k, v in pairs(opts) do
-				segment.defaults[k] = v
-			end
-		end
 	end
 
 	M.handlePrompt()
