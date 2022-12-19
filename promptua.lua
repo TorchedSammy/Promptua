@@ -10,7 +10,7 @@ local defaultConfig = {
 
 M = {
 	config = defaultConfig,
-	version = '0.3.0'
+	version = 'v0.4.0'
 }
 
 local function initProviders()
