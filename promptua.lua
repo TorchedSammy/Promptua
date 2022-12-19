@@ -58,15 +58,15 @@ end
 function M.setTheme(theme)
 	if type(theme) == 'string' then
 		local themeName = theme
-		local dataDir = hilbish.home .. '/.config/promptua/themes/'
-		local themeFile = dataDir .. theme .. '/' .. 'theme.lua'
-		local ok = nil
-		ok, theme = pcall(dofile, themeFile)
+
+		local themeFile = string.format('%s/promptua/themes/%s/theme.lua', hilbish.userDir.config, themeName)
+
+		local ok, res = pcall(dofile, themeFile)
+		theme = res
 		if not ok then
-			themeFile = searchpath('promptua.themes.' .. theme, package.path)
-			ok, theme = pcall(dofile, themeFile)
+			ok, theme = pcall(require, 'promptua.themes.' .. themeName)
 			if not ok then
-				error(string.format('promptua: error loading %s theme', themeName))
+				error(string.format('promptua: error loading %s theme\n first error: %s', themeName, res))
 				return
 			end
 		end
