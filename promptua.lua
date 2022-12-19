@@ -1,7 +1,7 @@
 local bait = require 'bait'
-local _ = require 'provider' -- get Providers tables
-local searchpath = require 'searchpath'
 local lunacolors = require 'lunacolors'
+local providers = require 'promptua.providers' -- get Providers tables
+local searchpath = require 'promptua.searchpath'
 
 local defaultConfig = {
 	format = '@style@icon@info',
@@ -15,7 +15,7 @@ M = {
 
 local function initProviders()
 	M.providers = {}
-	for k, v in pairs(Providers) do
+	for k, v in pairs(providers) do
 		for kk, vv in pairs(v) do
 			M.providers[k .. '.' .. kk] = vv
 		end

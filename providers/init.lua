@@ -1,8 +1,8 @@
 local bait = require 'bait'
-local git = require 'providers.git'
+local git = require 'promptua.providers.git'
 local execTime = nil
 
-Providers = {
+return {
 	dir = {
 		path = function()
 			return '%d'
