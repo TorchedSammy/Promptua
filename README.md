@@ -22,14 +22,16 @@ A theme is a table of [segments](#segments).
 ```lua
 local promptua = require 'promptua'
 
-local theme = {{
-	provider = 'dir.path',
-	style = 'blue',
-},
-{
-	provider = 'prompt.icon',
-	style = 'green'
-}}
+local theme = {
+	{
+		provider = 'dir.path',
+		style = 'blue',
+	},
+	{
+		provider = 'prompt.icon',
+		style = 'green'
+	}
+}
 
 promptua.setTheme(theme)
 promptua.init()
@@ -50,20 +52,20 @@ It can consist of the following keys:
 }
 ```
 
-The `provider` can be a function or string. If it is a string, it will get a premade
-provider function which matches.
+- `provider`: A function or string which *provides* the info for that segment. A string
+provider will use one of the [premade providers](#premade-providers). A function
+provider is passed the segment itself to set default values. If you are creating a theme,
+it is preferred to set `segment.defaults` for the default values in a segment.
 
-`condition` is a function which will determine whether to show the segment in the prompt.
+- `condition`: A function which will determine whether to show the segment in the prompt.
 If it returns false, the provider will not be run and the segment will be skipped,
 
-`style` is the color or general style of the info in the segment.
-It is space separated. The following styles are available:
-
-- Colors: black, red, green, blue, yellow, magenta, cyan, white.
-There are bright variants, which are prefixed with `bright-`, like `bright-red`.
-For background colors, there is a suffix of `-bg`, like `green-bg`.
-These can be combined, for example with `bright-blue-bg`.
-- Modifiers: dim, italic, underline, invert.
+- `style`: The color or general style of the info in the segment.
+It is space separated and follows the naming of Lunacolors, which you can
+find more info on by running `doc lunacolors`. The following styles are
+available:
+	- Colors: black, red, green, blue, yellow, magenta, cyan, white.
+	- Modifiers: dim, italic, underline, invert.
 
 ### Premade Providers
 - `dir.path` - Path of current directory
@@ -75,6 +77,12 @@ These can be combined, for example with `bright-blue-bg`.
 - `user.name` - Username
 - `user.hostname` - Hostname of machine
 
+## Using Premade Themes
+If you do not want to create a prompt on your own, you can look at the
+[premade themes](themes/) included in this repository. These themes
+can be used by just passing the name to the setTheme function like:
+`promptua.setTheme 'myeline'`
+
 ## Config
 If needed, you can change the default separator or format for segments,
 or have configuration for certain providers via the config.
@@ -84,7 +92,12 @@ Promptua has a default which looks like:
 ```lua
 {
 	format = '@style@icon@text',
-	separator = ' '
+	separator = ' ',
+	prompt = {
+		icon = '%',
+		fail = '!',
+		success = '%'
+	}
 }
 ```
 
