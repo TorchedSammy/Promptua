@@ -2,7 +2,7 @@
 > 📡 A customizable prompt "engine" for Hilbish.
 
 Promptua is a custom prompt builder/engine for Hilbish. It allows you to easily
-create good looking prompts with ease. For its use, it takes inspiration from
+create good looking prompts. For its use, it takes inspiration from
 [oh-my-posh](https://ohmyposh.dev/) and Galaxyline for Neovim.
 
 # Install
