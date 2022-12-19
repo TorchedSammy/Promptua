@@ -104,7 +104,7 @@ function M.handlePrompt(code)
 			local info = ''
 
 			if type(provider) == 'function' then
-				info = provider()
+				info = provider(segment)
 			elseif type(provider) == 'string' then
 				info = callDefaultProvider(provider, segment)
 			elseif provider == nil then
