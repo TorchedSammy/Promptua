@@ -107,6 +107,8 @@ function M.handlePrompt(code)
 				info = provider()
 			elseif type(provider) == 'string' then
 				info = callDefaultProvider(provider, segment)
+			elseif provider == nil then
+				info = ''
 			else
 				error('promptua: invalid provider')
 			end
@@ -139,6 +141,9 @@ function M.init()
 	if not M.prompt then error 'promptua: no theme set' end
 	-- add functions to segments in M.prompt
 	for _, segment in pairs(M.prompt) do
+		if type(segment.provider) == 'string' and not M.providers[segment.provider] then
+			error(string.format('promptua: unknown provider %s', segment.provider))
+		end
 		segment.defaults = {}
 	end
 
