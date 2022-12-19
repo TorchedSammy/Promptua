@@ -1,6 +1,7 @@
 local bait = require 'bait'
 local _ = require 'provider' -- get Providers tables
 local searchpath = require 'searchpath'
+local lunacolors = require 'lunacolors'
 
 local defaultConfig = {
 	format = '@style@icon@info',
@@ -30,52 +31,6 @@ local function loadTheme(thm)
 	M.prompt = thm
 end
 
-local function ansi(open, close, text)
-	if text == nil then return '\27[' .. open .. 'm' end
-	return '\27[' .. open .. 'm' .. text .. '\27[' .. close .. 'm'
-end
-local styles = {
-	reset = ansi(0),
-	bold = ansi(1),
-	dim = ansi(2),
-	italic = ansi(3),
-	underline = ansi(4),
-	invert = ansi(7),
-	bold_off = ansi(22),
-	underline_off = ansi(24),
-	black = ansi(30),
-	red = ansi(31),
-	green = ansi(32),
-	yellow = ansi(33),
-	blue = ansi(34),
-	magenta = ansi(35),
-	cyan = ansi(36),
-	white = ansi(37),
-	['red-bg'] = ansi(41),
-	['green-bg'] = ansi(42),
-	['yellow-bg'] = ansi(43),
-	['blue-bg'] = ansi(44),
-	['magenta-bg'] = ansi(45),
-	['cyan-bg'] = ansi(46),
-	['white-bg'] = ansi(47),
-	gray = ansi(90),
-	['bright-red'] = ansi(91),
-	['bright-green'] = ansi(92),
-	['bright-yellow'] = ansi(93),
-	['bright-blue'] = ansi(94),
-	['bright-magenta'] = ansi(95),
-	['bright-cyan'] = ansi(96),
-	['bright-white'] = ansi(97),
-	['bright-black'] = ansi(100),
-	['bright-red-bg'] = ansi(101),
-	['bright-green-bg'] = ansi(102),
-	['bright-yellow-bg'] = ansi(103),
-	['bright-blue-bg'] = ansi(104),
-	['bright-magenta-bg'] = ansi(105),
-	['bright-cyan-bg'] = ansi(106),
-	['bright-white-bg'] = ansi(107),
-}
-
 -- fmt takes a string with format verbs and a style and returns a formatted string,
 -- with style applied
 local function fmt(formatstr, style, verbs)
@@ -83,10 +38,10 @@ local function fmt(formatstr, style, verbs)
 		-- if its @style use our style
 		if v:sub(2) == 'style' then
 			return style:gsub('%a+', function(key)
-				if not styles[key] then
+				if not lunacolors.formatColors[key] then
 					return ''
 				end
-				return styles[key]
+				return lunacolors.formatColors[key]
 			end):gsub('%s+', '')
 		end
 		return verbs[v:sub(2)] or v
@@ -172,7 +127,7 @@ function M.handlePrompt(code)
 				end
 			end
 
-			promptStr = promptStr .. info .. separator .. styles.reset
+			promptStr = promptStr .. info .. separator .. lunacolors.formatColors.reset
 		end
 
 		if handleCond(cond) then handleSegment() end
