@@ -2,7 +2,8 @@ local M = {}
 
 function M.isRepo()
 	-- just run rev-parse to see if it's a git repo
-	return os.execute("git rev-parse --git-dir > /dev/null 2>&1") == 0
+	local _, _, code = os.execute("git rev-parse --git-dir > /dev/null 2>&1")
+	return code == 0
 end
 
 function M.getBranch()
