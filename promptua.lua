@@ -1,17 +1,17 @@
 local bait = require 'bait'
 local lunacolors = require 'lunacolors'
 local providers = require 'promptua.providers' -- get Providers tables
+local config = require 'promptua.config'
 local searchpath = require 'promptua.searchpath'
 
-local defaultConfig = {
-	format = '@style@icon@info',
-	separator = ' ',
-}
-
-M = {
-	config = defaultConfig,
+local M = {
 	version = 'v0.4.0'
 }
+setmetatable(M, {
+	__index = function(_, k)
+		if k == 'config' then return config end
+	end
+})
 
 local function initProviders()
 	M.providers = {}
@@ -50,15 +50,8 @@ local function fmt(formatstr, style, verbs)
 	return formatted
 end
 
-function M.setConfig(config)
-	-- Load config but add defaults
-	local mt = {
-		__index = function(_, k)
-			return defaultConfig[k]
-		end
-	}
-	setmetatable(config, mt)
-	M.config = config
+function M.setConfig(c)
+	config.set(c)
 end
 
 -- Sets a Promptua theme.
@@ -152,4 +145,5 @@ function M.init()
 end
 
 initProviders()
+M.setConfig {}
 return M

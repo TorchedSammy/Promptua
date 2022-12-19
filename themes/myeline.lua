@@ -14,7 +14,7 @@ return {
 	{
 		provider = 'prompt.failSuccess',
 		style = function(info)
-			if info.exitCode ~= 0 then
+			if hilbish.exitCode ~= 0 then
 				return 'bold red'
 			else
 				return 'bold green'

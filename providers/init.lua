@@ -1,4 +1,5 @@
 local bait = require 'bait'
+local config = require 'promptua.config'
 local git = require 'promptua.providers.git'
 local execTime = nil
 
@@ -24,19 +25,19 @@ return {
 	},
 	prompt = {
 		icon = function ()
-			return M.config.prompt.icon
+			return config.prompt.icon
 		end,
 		failSuccess = function(segment)
 			if hilbish.exitCode == 0 then
 				-- defaults for success prompt
 				segment.defaults = {
 					style = 'green',
-					icon = '%'
+					icon = config.prompt.success or config.prompt.icon
 				}
 			else
 				segment.defaults = {
 					style = 'bold red',
-					icon = '!'
+					icon = config.prompt.fail or config.prompt.icon
 				}
 			end
 		end
