@@ -77,7 +77,7 @@ return {
 			end
 
 			if execTime > 60 then
-				return string.format('%dm %ds', execTime / 60, execTime % 60)
+				return string.format('%dm %ds', math.floor(execTime / 60), execTime % 60)
 			else
 				return string.format('%ds', execTime)
 			end
