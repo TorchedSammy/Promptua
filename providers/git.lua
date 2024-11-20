@@ -2,16 +2,25 @@ local M = {}
 
 function M.isRepo()
 	-- just run rev-parse to see if it's a git repo
-	local _, _, code = os.execute("git rev-parse --git-dir > /dev/null 2>&1")
-	return code == 0
+	local gitRepo = io.popen 'git rev-parse --git-dir'
+	local getHeadfile = gitRepo:read('*a'):gsub('\n', '')
+	gitRepo:close()
+	local isRepo = not getHeadfile:match 'fatal: not a git repository' or false
+
+	if isRepo then
+		return true, getHeadfile
+	else
+		return false, ''
+	end
 end
 
 function M.getBranch()
-	if not M.isRepo() then
+	local isRepo, getHeadfile = M.isRepo()
+	if not isRepo then
 		return nil
 	end
 
-	local headfile = io.open '.git/HEAD'
+	local headfile = io.open(getHeadfile .. '/HEAD')
 	if not headfile then
 		return nil
 	end
@@ -21,7 +30,7 @@ function M.getBranch()
 	-- there is a format like 'ref: refs/heads/master'
 	-- so get just the branch name
 	-- and handle detached head case
-	local branch = inf:match 'ref: refs/heads/(.+)' or inf:match 'ref: (.+)'
+	local branch = inf:match 'ref: refs/heads/(.+)' or inf:match 'ref: (.+)' or inf:match '(.+)'
 
 	-- remove newline
 	if branch then branch = branch:gsub('\n', '') end
@@ -68,3 +77,4 @@ function M.behindRemote()
 end
 
 return M
+
